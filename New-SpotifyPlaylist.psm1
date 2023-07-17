@@ -1,4 +1,4 @@
-function New-Playlist {
+function New-SpotifyPlaylist {
     [CmdletBinding()]
     param (
         [string]$playlistName,
@@ -74,7 +74,7 @@ function New-Playlist {
         $genreList = Get-Content $PSScriptRoot\Public\genreList.txt
 
         if ($genreSearch) {
-            
+
             foreach ($genre in $genreSearch -split ",") {
 
                 if (($genreList | Where-Object { $_ -like "*$($genre)*" }).count -ge 2 -and ($genreList | Where-Object { $_ -like "*$($genre)*" }).count -ge 1 ) {
@@ -139,7 +139,7 @@ function New-Playlist {
                     $genreExists = ((Invoke-WebRequest -Uri $genreFinder -Headers $headers).Content | ConvertFrom-Json).tracks.items
 
                     if (!$genreExists) {
-    
+
                         Write-Host "I can't find any songs for the genre $($chosenGenre -replace "%20", " " -replace "%22",'')!" -ForegroundColor Red
 
                         if ($chosenGenres.Count -ge 2) {
@@ -177,7 +177,7 @@ function New-Playlist {
                             ],
                             "position": 0
                         }'    
-    
+
                 Write-Host "adding $($songExists.name) by $($songExists.album.artists.name) to playlist - Genre is $($chosenGenre -replace "%20", " " -replace "%22", '')" -ForegroundColor Cyan
                 $updatePlaylist = Invoke-WebRequest -Uri $url -Method Post -Body $body -Headers $headers -SkipHttpErrorCheck -ErrorAction SilentlyContinue
                 
